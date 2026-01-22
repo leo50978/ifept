@@ -3,905 +3,955 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CICLE - Investissement Chrétien pour la Liberté Économique</title>
+    <title>IFEPT - Institut de Formation et d'Éducation Professionnelle et Technologique</title>
     
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Anime.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore-compat.js"></script>
+    <!-- IMPORTANT : Ajout de Firebase Authentication SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth-compat.js"></script>
+    
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);
-            --secondary-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            --accent-gradient: linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%);
+            --primary: #1e40af;
+            --secondary: #0ea5e9;
+            --accent: #3b82f6;
         }
         
-        body {
+        * {
             font-family: 'Inter', sans-serif;
         }
         
-        .font-display {
-            font-family: 'Playfair Display', serif;
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Poppins', sans-serif;
         }
         
-        .gradient-primary {
-            background: var(--primary-gradient);
+        .section-hidden {
+            opacity: 0;
+            transform: translateY(30px);
         }
         
-        .gradient-secondary {
-            background: var(--secondary-gradient);
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
         }
         
-        .gradient-accent {
-            background: var(--accent-gradient);
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .hero-bg {
-            background: linear-gradient(135deg, rgba(43, 88, 118, 0.9), rgba(78, 67, 118, 0.9)),
-                        url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
-            background-size: cover;
-            background-position: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5));
         }
         
-        .value-card {
+        .card-hover {
             transition: all 0.3s ease;
-            border-left: 4px solid transparent;
         }
         
-        .value-card:hover {
-            transform: translateY(-5px);
-            border-left-color: #4e4376;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
         
-        .floating {
-            animation: floating 6s ease-in-out infinite;
+        .program-image-container {
+            height: 200px;
+            overflow: hidden;
         }
         
-        @keyframes floating {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+        .program-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
         }
         
-        .section-reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
+        .card-hover:hover .program-image {
+            transform: scale(1.05);
         }
         
-        .section-visible {
-            opacity: 1;
-            transform: translateY(0);
+        .color-badge-blue {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .color-badge-green {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        
+        .color-badge-purple {
+            background-color: #f3e8ff;
+            color: #6b21a8;
+        }
+        
+        .color-badge-red {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .color-badge-yellow {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        /* Styles pour le header */
+        .user-menu-hidden {
+            display: none !important;
+        }
+        
+        .auth-buttons-hidden {
+            display: none !important;
+        }
+        
+        .user-avatar {
+            transition: transform 0.2s ease;
+        }
+        
+        .user-avatar:hover {
+            transform: scale(1.1);
         }
     </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Header -->
-    <header class="fixed top-0 w-full z-50 bg-white shadow-md">
-        <nav class="container mx-auto px-4 py-4">
-            <div class="flex items-center justify-between">
+ <!-- HEADER INTÉGRÉ DIRECTEMENT DANS LA PAGE -->
+<header class="fixed w-full z-50">
+    <nav class="bg-white shadow-md">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
                 <!-- Logo -->
                 <div class="flex items-center space-x-3">
                     <div class="w-12 h-12  rounded-lg flex items-center justify-center">
-                     <img src="logo_cicle-removebg-preview.png" alt="">
+                     <img src="ifptlogo-removebg-preview.png" alt="">
                     </div>
                 </div>
-                
-                <!-- Desktop Menu -->
-               <div class="hidden lg:flex items-center space-x-8">
-    <a href="#mission" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Mission</a>
-    <a href="#vision" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Vision</a>
-    <a href="#valeurs" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Valeurs</a>
-    <a href="celi.html" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">CELI</a>
-    <a href="invest.html" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">CELI CEC</a>
-    <a href="elan.html" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">ELAN VS</a>
-    <a href="#contact" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Contact</a>
-</div>
 
-                
-                <!-- CTA Button -->
-                <button class="hidden md:block gradient-primary text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all">
-                    Devenir Membre
-                </button>
-                
-                <!-- Mobile Menu Button -->
-                <button class="lg:hidden text-gray-700 text-2xl" id="mobile-menu-btn">
-                    <i class="fas fa-bars"></i>
+                <!-- Navigation Desktop -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-blue-700 font-medium">Accueil</a>
+                    <a href="cours.html" class="text-gray-700 hover:text-blue-700 font-medium">Cours</a>
+                    <a href="admission.html" class="text-gray-700 hover:text-blue-700 font-medium">Admission</a>
+                    <a href="blog.html" class="text-gray-700 hover:text-blue-700 font-medium">Actualités</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-blue-700 font-medium">Contact</a>
+                    
+                    <!-- Boutons d'authentification (visible quand l'utilisateur n'est PAS connecté) -->
+                    <div id="auth-buttons-desktop" class="flex items-center space-x-4">
+                        <a href="connexion.html" class="text-blue-600 hover:text-blue-800 font-medium">
+                            Connexion
+                        </a>
+                        <a href="inscription.html" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300">
+                            Inscription
+                        </a>
+                    </div>
+                    
+                    <!-- Menu utilisateur (visible quand l'utilisateur EST connecté) -->
+                    <div id="user-menu-desktop" class="user-menu-hidden flex items-center space-x-4">
+                        <div class="relative">
+                            <button id="user-menu-button" class="flex items-center focus:outline-none">
+                                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center user-avatar">
+                                    <i class="fas fa-user text-blue-600"></i>
+                                </div>
+                            </button>
+                            
+                            <!-- Dropdown menu utilisateur -->
+                            <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden">
+                                <a href="profil.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-user-circle mr-2"></i> Mon profil
+                                </a>
+                                <button id="logout-button" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-sign-out-alt mr-2"></i> Déconnexion
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bouton menu mobile -->
+                <button class="md:hidden text-gray-700 focus:outline-none" id="mobile-menu-button">
+                    <i class="fas fa-bars text-2xl"></i>
                 </button>
             </div>
-        </nav>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero-bg min-h-screen flex items-center pt-20">
-        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+        </div>
         
-        <div class="container mx-auto px-4 py-20 relative z-10">
-            <div class="max-w-4xl mx-auto text-center">
-                <h1 class="font-display font-bold text-4xl md:text-6xl lg:text-7xl text-white mb-6 leading-tight">
-                    <span class="gradient-accent bg-clip-text text-transparent">Investissement Chrétien</span><br>pour la Liberté Économique
-                </h1>
-                <p class="text-xl md:text-2xl text-blue-100 mb-8 leading-relaxed">
-                    Former, connecter et équiper les investisseurs chrétiens pour transformer l'économie selon les valeurs du Royaume
-                </p>
+        <!-- Menu Mobile -->
+        <div id="mobile-menu" class="md:hidden bg-white shadow-lg px-4 py-3 hidden">
+            <div class="flex flex-col space-y-4">
+                <a href="index.html" class="text-blue-700 font-medium py-2">Accueil</a>
+                <a href="cours.html" class="text-gray-700 hover:text-blue-700 font-medium py-2">Cours</a>
+                <a href="blog.html" class="text-gray-700 hover:text-blue-700 font-medium py-2">Actualité</a>
+                <a href="admission.html" class="text-gray-700 hover:text-blue-700 font-medium py-2">Admissions</a>
+                <a href="contact.html" class="text-gray-700 hover:text-blue-700 font-medium py-2">Contact</a>
                 
-                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                    <a href="#mission" class="gradient-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-xl transition-all">
-                        <i class="fas fa-cross mr-2"></i>
-                        Découvrir notre mission
+                <!-- Boutons d'authentification mobile -->
+                <div id="auth-buttons-mobile" class="pt-4 border-t border-gray-200">
+                    <a href="connexion.html" class="block text-center text-blue-600 hover:text-blue-800 font-medium py-2">
+                        Connexion
                     </a>
-                    <a href="celi.html" class="bg-white text-gray-800 px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-xl transition-all">
-                        <i class="fas fa-calendar-check mr-2"></i>
-                       CELI
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
- <!-- Nouvelle Section: Nos Centres -->
-<section id="centres" class="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
-    <div class="container mx-auto px-4">
-        <div class="max-w-4xl mx-auto text-center mb-16">
-            <h2 class="font-display font-bold text-3xl md:text-4xl text-gray-800 mb-4">
-                Nos <span class="gradient-primary bg-clip-text text-transparent">Centres</span>
-            </h2>
-            <div class="w-24 h-1 gradient-primary mx-auto mb-6"></div>
-            <p class="text-xl text-gray-600">
-                Découvrez nos trois pôles d'excellence pour la vision, la formation et l'investissement chrétien
-            </p>
-        </div>
-
-        <!-- Grille des centres -->
-        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-
-            <!-- ÉLAN VISIONNAIRE -->
-            <div class="bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
-                <div class="h-48 bg-gradient-to-r from-purple-600 to-blue-600 relative overflow-hidden">
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <i class="fas fa-lightbulb text-white text-6xl opacity-20"></i>
-                    </div>
-                    <div class="absolute bottom-4 left-6">
-                        <h3 class="text-white text-2xl font-bold">Élan Visionnaire</h3>
-                        <p class="text-purple-100">Vision • Communauté • Impact</p>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <p class="text-gray-600 mb-6">
-                        Le cœur du mouvement Élan Visionnaire : une plateforme qui connecte,
-                        inspire et élève les croyants à travers le leadership, la foi et l'impact.
-                    </p>
-                    <div class="space-y-3 mb-6">
-                        <div class="flex items-center">
-                            <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
-                                <i class="fas fa-check text-purple-600 text-sm"></i>
-                            </div>
-                            <span class="text-gray-700">Communauté & réseautage</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
-                                <i class="fas fa-check text-purple-600 text-sm"></i>
-                            </div>
-                            <span class="text-gray-700">Mentorat & leadership</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
-                                <i class="fas fa-check text-purple-600 text-sm"></i>
-                            </div>
-                            <span class="text-gray-700">Incubation de projets</span>
-                        </div>
-                    </div>
-                    <a href="elan.html" class="block w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white text-center py-3 rounded-lg font-semibold hover:shadow-lg transition-all">
-                        <i class="fas fa-arrow-right mr-2"></i>
-                        Découvrir
+                    <a href="inscription.html" class="block text-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg mt-2 transition duration-300">
+                        Inscription
                     </a>
                 </div>
-            </div>
-
-            <!-- CELI ÉCOLE -->
-            <div class="bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
-                <div class="h-48 gradient-primary relative overflow-hidden">
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <i class="fas fa-graduation-cap text-white text-6xl opacity-20"></i>
-                    </div>
-                    <div class="absolute bottom-4 left-6">
-                        <h3 class="text-white text-2xl font-bold">CELI École</h3>
-                        <p class="text-blue-100">Centre d'Excellence en Leadership et Innovation</p>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <p class="text-gray-600 mb-6">
-                        Notre école de formation prépare la prochaine génération de leaders
-                        chrétiens dans l'entrepreneuriat, la gestion et l'innovation.
-                    </p>
-                    <div class="space-y-3 mb-6">
-                        <div class="flex items-center">
-                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                                <i class="fas fa-check text-blue-600 text-sm"></i>
-                            </div>
-                            <span class="text-gray-700">Formations certifiantes</span>
+                
+                <!-- Menu utilisateur mobile -->
+                <div id="user-menu-mobile" class="user-menu-hidden pt-4 border-t border-gray-200">
+                    <a href="profil.html" class="flex items-center text-gray-700 hover:text-blue-700 font-medium py-2">
+                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-user text-blue-600"></i>
                         </div>
-                        <div class="flex items-center">
-                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                                <i class="fas fa-check text-blue-600 text-sm"></i>
-                            </div>
-                            <span class="text-gray-700">Ateliers pratiques</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                                <i class="fas fa-check text-blue-600 text-sm"></i>
-                            </div>
-                            <span class="text-gray-700">Mentorat personnalisé</span>
-                        </div>
-                    </div>
-                    <a href="celi.html" class="block w-full gradient-primary text-white text-center py-3 rounded-lg font-semibold hover:shadow-lg transition-all">
-                        <i class="fas fa-arrow-right mr-2"></i>
-                        En savoir plus
+                        Mon profil
                     </a>
-                </div>
-            </div>
-
-            <!-- CEC INVEST -->
-            <div class="bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
-                <div class="h-48 gradient-secondary relative overflow-hidden">
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <i class="fas fa-chart-line text-white text-6xl opacity-20"></i>
-                    </div>
-                    <div class="absolute bottom-4 left-6">
-                        <h3 class="text-white text-2xl font-bold">CEC Invest</h3>
-                        <p class="text-green-100">Centre d'Économie Chrétienne</p>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <p class="text-gray-600 mb-6">
-                        Notre centre d'investissement finance des projets entrepreneuriaux
-                        alignés sur les valeurs chrétiennes et à fort impact social.
-                    </p>
-                    <div class="space-y-3 mb-6">
-                        <div class="flex items-center">
-                            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
-                                <i class="fas fa-check text-green-600 text-sm"></i>
-                            </div>
-                            <span class="text-gray-700">Fonds d'investissement solidaire</span>
+                    <button id="logout-button-mobile" class="w-full flex items-center text-left text-gray-700 hover:text-blue-700 font-medium py-2">
+                        <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-sign-out-alt text-gray-600"></i>
                         </div>
-                        <div class="flex items-center">
-                            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
-                                <i class="fas fa-check text-green-600 text-sm"></i>
-                            </div>
-                            <span class="text-gray-700">Accompagnement financier</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
-                                <i class="fas fa-check text-green-600 text-sm"></i>
-                            </div>
-                            <span class="text-gray-700">Réseau d'investisseurs</span>
-                        </div>
-                    </div>
-                    <a href="invest.html" class="block w-full gradient-secondary text-white text-center py-3 rounded-lg font-semibold hover:shadow-lg transition-all">
-                        <i class="fas fa-arrow-right mr-2"></i>
-                        En savoir plus
-                    </a>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-
-  
-    <section id="mission" class="py-20 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto text-center mb-16">
-                <h2 class="font-display font-bold text-3xl md:text-4xl text-gray-800 mb-4">
-                    Notre <span class="gradient-primary bg-clip-text text-transparent">Mission</span>
-                </h2>
-                <div class="w-24 h-1 gradient-primary mx-auto mb-6"></div>
-                <p class="text-xl text-gray-600">
-                    Promouvoir l'entrepreneuriat, l'investissement responsable et la liberté économique fondés sur les principes bibliques.
-                </p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                <div class="bg-gray-50 p-8 rounded-xl shadow-sm value-card">
-                    <div class="w-16 h-16 gradient-primary rounded-lg flex items-center justify-center mb-6 text-white text-2xl">
-                        <i class="fas fa-bible"></i>
-                    </div>
-                    <h3 class="font-bold text-xl text-gray-800 mb-3">Contexte</h3>
-                    <p class="text-gray-600">
-                        Dans un monde économique souvent gouverné par des intérêts matérialistes, les chrétiens manquent de ressources et d'accompagnement pour investir selon leurs valeurs. Le CICLE répond à ce besoin crucial.
-                    </p>
-                </div>
-                
-                <div class="bg-gray-50 p-8 rounded-xl shadow-sm value-card">
-                    <div class="w-16 h-16 gradient-secondary rounded-lg flex items-center justify-center mb-6 text-white text-2xl">
-                        <i class="fas fa-bullseye"></i>
-                    </div>
-                    <h3 class="font-bold text-xl text-gray-800 mb-3">Objectifs</h3>
-                    <ul class="text-gray-600 list-disc pl-5 space-y-2">
-                        <li>Former les chrétiens en leadership économique</li>
-                        <li>Encourager les investissements éthiques</li>
-                        <li>Créer un réseau d'investisseurs engagés</li>
-                        <li>Influencer positivement les politiques économiques</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Vision Section -->
-    <section id="vision" class="py-20 gradient-primary">
-        <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto text-center">
-                <h2 class="font-display font-bold text-3xl md:text-4xl text-white mb-4">
-                    Notre <span class="gradient-accent bg-clip-text text-transparent">Vision</span>
-                </h2>
-                <div class="w-24 h-1 bg-white mx-auto mb-6"></div>
-                <p class="text-xl text-blue-100 mb-8">
-                    "Bâtir une communauté d'investisseurs chrétiens libres, influents et engagés pour un monde économiquement équitable, prospère et fidèle aux valeurs du Royaume de Dieu."
-                </p>
-                
-                <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mt-12">
-                    <div class="bg-white bg-opacity-10 backdrop-blur-sm p-6 rounded-xl border border-white border-opacity-20">
-                        <h3 class="font-bold text-lg text-white mb-3">Court Terme</h3>
-                        <p class="text-blue-100">
-                            Structurer l'organisation et lancer les premiers programmes de formation
-                        </p>
-                    </div>
-                    
-                    <div class="bg-white bg-opacity-10 backdrop-blur-sm p-6 rounded-xl border border-white border-opacity-20">
-                        <h3 class="font-bold text-lg text-white mb-3">Moyen Terme</h3>
-                        <p class="text-blue-100">
-                            Développer l'incubateur et le fonds d'investissement solidaire
-                        </p>
-                    </div>
-                    
-                    <div class="bg-white bg-opacity-10 backdrop-blur-sm p-6 rounded-xl border border-white border-opacity-20">
-                        <h3 class="font-bold text-lg text-white mb-3">Long Terme</h3>
-                        <p class="text-blue-100">
-                            Élargir notre impact à l'international et influencer les politiques économiques
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Valeurs Section -->
-    <section id="valeurs" class="py-20 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto text-center mb-16">
-                <h2 class="font-display font-bold text-3xl md:text-4xl text-gray-800 mb-4">
-                    Nos <span class="gradient-primary bg-clip-text text-transparent">Valeurs</span>
-                </h2>
-                <div class="w-24 h-1 gradient-primary mx-auto mb-6"></div>
-                <p class="text-xl text-gray-600">
-                    Les principes fondamentaux qui guident toutes nos actions et décisions
-                </p>
-            </div>
-            
-            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-                <div class="bg-gray-50 p-6 rounded-lg value-card">
-                    <div class="w-12 h-12 gradient-primary rounded-lg flex items-center justify-center mb-4 text-white">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-2">Intégrité</h3>
-                    <p class="text-gray-600 text-sm">
-                        Nous pratiquons une transparence absolue dans toutes nos transactions et relations.
-                    </p>
-                </div>
-                
-                <div class="bg-gray-50 p-6 rounded-lg value-card">
-                    <div class="w-12 h-12 gradient-primary rounded-lg flex items-center justify-center mb-4 text-white">
-                        <i class="fas fa-hands-helping"></i>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-2">Responsabilité</h3>
-                    <p class="text-gray-600 text-sm">
-                        Nous rendons compte à Dieu, à nos membres et aux communautés que nous servons.
-                    </p>
-                </div>
-                
-                <div class="bg-gray-50 p-6 rounded-lg value-card">
-                    <div class="w-12 h-12 gradient-primary rounded-lg flex items-center justify-center mb-4 text-white">
-                        <i class="fas fa-award"></i>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-2">Excellence</h3>
-                    <p class="text-gray-600 text-sm">
-                        Nous visons la plus haute qualité dans tous nos programmes et services.
-                    </p>
-                </div>
-                
-                <div class="bg-gray-50 p-6 rounded-lg value-card">
-                    <div class="w-12 h-12 gradient-primary rounded-lg flex items-center justify-center mb-4 text-white">
-                        <i class="fas fa-pray"></i>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-2">Foi Vivante</h3>
-                    <p class="text-gray-600 text-sm">
-                        Nous intégrons la prière et les principes bibliques dans toutes nos activités.
-                    </p>
-                </div>
-                
-                <div class="bg-gray-50 p-6 rounded-lg value-card">
-                    <div class="w-12 h-12 gradient-primary rounded-lg flex items-center justify-center mb-4 text-white">
-                        <i class="fas fa-hand-holding-heart"></i>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-2">Solidarité</h3>
-                    <p class="text-gray-600 text-sm">
-                        Nous croyons en la puissance du partage et de l'entraide communautaire.
-                    </p>
-                </div>
-                
-                <div class="bg-gray-50 p-6 rounded-lg value-card">
-                    <div class="w-12 h-12 gradient-primary rounded-lg flex items-center justify-center mb-4 text-white">
-                        <i class="fas fa-globe-americas"></i>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-2">Bien Commun</h3>
-                    <p class="text-gray-600 text-sm">
-                        Nous cherchons le profit, mais toujours au service du développement humain intégral.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Programmes Section -->
-<section id="programmes" class="py-20 bg-gray-50">
-        <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto text-center mb-16">
-                <h2 class="font-display font-bold text-3xl md:text-4xl text-gray-800 mb-4">
-                    Nos <span class="gradient-primary bg-clip-text text-transparent">Programmes</span>
-                </h2>
-                <div class="w-24 h-1 gradient-primary mx-auto mb-6"></div>
-                <p class="text-xl text-gray-600">
-                    Des formations et accompagnements concrets pour un développement intégral
-                </p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                
-                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
-                    <div class="gradient-primary text-white text-2xl w-14 h-14 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-bible"></i>
-                    </div>
-                    <h3 class="font-bold text-xl text-gray-800 mb-3">Formation Spirituelle et Leadership</h3>
-                    <ul class="text-gray-600 space-y-2">
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Développement du leadership chrétien</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Formation biblique et théologique</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
-                    <div class="gradient-secondary text-white text-2xl w-14 h-14 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-user-friends"></i>
-                    </div>
-                    <h3 class="font-bold text-xl text-gray-800 mb-3">Mentorat et Coaching</h3>
-                    <ul class="text-gray-600 space-y-2">
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Accompagnement individuel par des mentors expérimentés</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Suivi personnalisé de projets (professionnels ou spirituels)</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Cercles de croissance</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
-                    <div class="gradient-accent text-white text-2xl w-14 h-14 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-user-cog"></i>
-                    </div>
-                    <h3 class="font-bold text-xl text-gray-800 mb-3">Développement Personnel et Professionnel</h3>
-                    <ul class="text-gray-600 space-y-2">
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Communication efficace</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Gestion du temps et des priorités</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Compétences entrepreneuriales</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Planification de carrière</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
-                    <div class="bg-gradient-to-br from-purple-500 to-pink-500 text-white text-2xl w-14 h-14 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3 class="font-bold text-xl text-gray-800 mb-3">Formation Économique et Entrepreneuriale</h3>
-                    <ul class="text-gray-600 space-y-2">
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Introduction à la liberté économique chrétienne</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Création et gestion de projets</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Coopération financière (communautés d'investissement, tontines)</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
-                    <div class="bg-gradient-to-br from-green-500 to-teal-500 text-white text-2xl w-14 h-14 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-network-wired"></i>
-                    </div>
-                    <h3 class="font-bold text-xl text-gray-800 mb-3">Réseautage et Entraide</h3>
-                    <ul class="text-gray-600 space-y-2">
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Réseau de soutien mutuel</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Partage d'opportunités</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                            <span>Connexion communautaire</span>
-                        </li>
-                    </ul>
-                </div>
-                
-            </div>
-            
-            <div class="text-center mt-12">
-                <button class="gradient-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-xl transition-all">
-                    <i class="fas fa-calendar-alt mr-2"></i>
-                    Voir notre calendrier d'événements
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Équipe Section -->
-    <section id="equipe" class="py-20 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto text-center mb-16">
-                <h2 class="font-display font-bold text-3xl md:text-4xl text-gray-800 mb-4">
-                    Notre <span class="gradient-primary bg-clip-text text-transparent">Équipe</span>
-                </h2>
-                <div class="w-24 h-1 gradient-primary mx-auto mb-6"></div>
-                <p class="text-xl text-gray-600">
-                    Une équipe dévouée à la promotion de la liberté économique chrétienne
-                </p>
-            </div>
-            
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-                <div class="text-center">
-                    <div class="w-40 h-40 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg gradient-primary flex items-center justify-center text-white text-5xl">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <h3 class="font-bold text-xl text-gray-800 mb-1">Joël Nozé</h3>
-                    <p class="text-blue-600 font-medium mb-2">Directeur Général</p>
-                    <p class="text-gray-600 text-sm">
-                        Leader visionnaire avec 15 ans d'expérience en entrepreneuriat chrétien.
-                    </p>
-                </div>
-                
-                <div class="text-center">
-                    <div class="w-40 h-40 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg gradient-primary flex items-center justify-center text-white text-5xl">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <h3 class="font-bold text-xl text-gray-800 mb-1">Lambert Lesly 
-</h3>
-                    <p class="text-blue-600 font-medium mb-2">Trésorier</p>
-                    <p class="text-gray-600 text-sm">
-                        Expert en gestion financière et investissements éthiques.
-                    </p>
-                </div>
-                
-                <div class="text-center">
-                    <div class="w-40 h-40 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg gradient-primary flex items-center justify-center text-white text-5xl">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <h3 class="font-bold text-xl text-gray-800 mb-1">Jean Jolius 
-</h3>
-                    <p class="text-blue-600 font-medium mb-2">Secrétaire</p>
-                    <p class="text-gray-600 text-sm">
-                        Spécialiste en administration et gestion de projets.
-                    </p>
-                </div>
-                
-                <div class="text-center">
-                    <div class="w-40 h-40 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg gradient-primary flex items-center justify-center text-white text-5xl">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <h3 class="font-bold text-xl text-gray-800 mb-1"> Inamour Colin</h3>
-                    <p class="text-blue-600 font-medium mb-2">Directeur des Programmes</p>
-                    <p class="text-gray-600 text-sm">
-                        Entrepreneur et formateur en économie solidaire.
-                    </p>
-                </div>
-            </div>
-            
-            <div class="max-w-3xl mx-auto mt-12 bg-gray-50 p-8 rounded-xl">
-                <h3 class="font-bold text-xl text-gray-800 mb-4 text-center">Rejoindre notre Conseil d'Administration</h3>
-                <p class="text-gray-600 mb-6 text-center">
-                    Vous souhaitez contribuer à notre mission en tant que membre actif de notre gouvernance ?
-                </p>
-                <div class="text-center">
-                    <button class="gradient-primary text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all">
-                        <i class="fas fa-envelope mr-2"></i>
-                        Nous contacter
+                        Déconnexion
                     </button>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="py-20 bg-gray-900 text-white">
-        <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto text-center mb-16">
-                <h2 class="font-display font-bold text-3xl md:text-4xl text-white mb-4">
-                    Nous <span class="gradient-accent bg-clip-text text-transparent">Contacter</span>
-                </h2>
-                <div class="w-24 h-1 bg-white mx-auto mb-6"></div>
-                <p class="text-xl text-blue-100">
-                    Prêt à rejoindre le mouvement pour une économie chrétienne libre et solidaire ?
-                </p>
+    </nav>
+</header>
+<div class="h-16"></div> <!-- Espace pour le header fixe -->
+    <!-- Contenu principal -->
+    <main>
+        <!-- Section Hero -->
+        <section id="hero" class="relative h-screen flex items-center justify-center overflow-hidden">
+            <!-- Background image/vidéo -->
+            <div id="hero-background" class="absolute inset-0 z-0">
+                <!-- L'image ou vidéo sera chargée dynamiquement depuis Firebase -->
+                <div class="bg-blue-900 absolute inset-0 opacity-70"></div>
             </div>
             
-            <div class="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
-                <div>
-                    <h3 class="font-bold text-xl mb-6">Informations</h3>
-                    
-                    <div class="space-y-4">
-                        <div class="flex items-start space-x-4">
-                            <div class="w-10 h-10 gradient-primary rounded-lg flex items-center justify-center text-white mt-1">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-medium">Adresse</h4>
-                                <p class="text-blue-100">#4, Anglade, Fermathe 45, Haïti</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start space-x-4">
-                            <div class="w-10 h-10 gradient-primary rounded-lg flex items-center justify-center text-white mt-1">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-medium">Email</h4>
-                                <p class="text-blue-100">info@cicle.org</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start space-x-4">
-                            <div class="w-10 h-10 gradient-primary rounded-lg flex items-center justify-center text-white mt-1">
-                                <i class="fas fa-phone-alt"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-medium">Téléphone</h4>
-                                <p class="text-blue-100">+509 XX XX XX XX</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start space-x-4">
-                            <div class="w-10 h-10 gradient-primary rounded-lg flex items-center justify-center text-white mt-1">
-                                <i class="fas fa-calendar-alt"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-medium">Heures d'ouverture</h4>
-                                <p class="text-blue-100">Lundi-Vendredi: 8h-16h</p>
-                            </div>
-                        </div>
+            <!-- Contenu Hero -->
+            <div class="relative z-10 text-center text-white px-4 max-w-6xl mx-auto">
+                <div class="section-hidden" id="hero-content">
+                    <h1 id="hero-title" class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                        Institut de Formation et d'Éducation Professionnelle et Technologique
+                    </h1>
+                    <p id="hero-subtitle" class="text-xl md:text-2xl mb-10 max-w-3xl mx-auto text-blue-100">
+                        Former les talents de demain avec des programmes innovants et adaptés au marché
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button id="cta-courses" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-300 transform hover:scale-105">
+                            <i class="fas fa-book-open mr-2"></i> Voir les cours
+                        </button>
+                        <button id="cta-register" class="bg-white hover:bg-gray-100 text-blue-800 font-bold py-3 px-8 rounded-lg text-lg transition duration-300 transform hover:scale-105">
+                            <i class="fas fa-user-plus mr-2"></i> S'inscrire
+                        </button>
                     </div>
-                    
-                    <div class="mt-8">
-                        <h4 class="font-medium mb-4">Suivez-nous</h4>
+                </div>
+            </div>
+            
+            <!-- Scroll indicator -->
+            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+                <a href="#presentation" class="text-white animate-bounce">
+                    <i class="fas fa-chevron-down text-3xl"></i>
+                </a>
+            </div>
+        </section>
+        
+        <!-- Section Présentation -->
+        <section id="presentation" class="py-16 md:py-24 px-4 section-hidden">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+                        Notre Mission
+                    </h2>
+                    <div class="h-1 w-24 bg-blue-600 mx-auto mb-8"></div>
+                </div>
+                
+                <div id="presentation-content" class="bg-white rounded-xl shadow-lg p-8 md:p-12">
+                    <p id="presentation-text" class="text-lg md:text-xl text-gray-700 leading-relaxed">
+                        L'IFEPT s'engage à offrir une éducation professionnelle et technologique de qualité, en phase avec les besoins du marché du travail. Notre mission est de former des professionnels compétents, innovants et prêts à relever les défis de l'économie moderne.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section Programmes -->
+        <section id="programs" class="py-16 md:py-24 bg-gray-100">
+            <div class="max-w-6xl mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+                        Nos Formations
+                    </h2>
+                    <div class="h-1 w-24 bg-blue-600 mx-auto mb-8"></div>
+                    <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                        Découvrez nos programmes de formation conçus pour vous préparer aux métiers d'avenir
+                    </p>
+                </div>
+                
+                <div id="programs-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Les programmes seront chargés dynamiquement depuis Firebase -->
+                    <div class="text-center py-6">
+                        <div class="spinner-border text-blue-600" role="status">
+                            <i class="fas fa-spinner fa-spin fa-2x"></i>
+                        </div>
+                        <p class="mt-4">Chargement des programmes...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section Pourquoi choisir IFEPT -->
+        <section id="why-choose" class="py-16 md:py-24 px-4 section-hidden">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+                        Pourquoi choisir IFEPT ?
+                    </h2>
+                    <div class="h-1 w-24 bg-blue-600 mx-auto mb-8"></div>
+                </div>
+                
+                <div id="features-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Les avantages seront chargés dynamiquement depuis Firebase -->
+                    <div class="text-center py-6">
+                        <div class="spinner-border text-blue-600" role="status">
+                            <i class="fas fa-spinner fa-spin fa-2x"></i>
+                        </div>
+                        <p class="mt-4">Chargement...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section Actualités -->
+        <section id="news" class="py-16 md:py-24 bg-gray-100 section-hidden">
+            <div class="max-w-6xl mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+                        Actualités & Blog
+                    </h2>
+                    <div class="h-1 w-24 bg-blue-600 mx-auto mb-8"></div>
+                    <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                        Restez informé des dernières actualités de l'institut et des tendances éducatives
+                    </p>
+                </div>
+                
+                <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Les actualités seront chargées dynamiquement depuis Firebase -->
+                    <div class="text-center py-6">
+                        <div class="spinner-border text-blue-600" role="status">
+                            <i class="fas fa-spinner fa-spin fa-2x"></i>
+                        </div>
+                        <p class="mt-4">Chargement des actualités...</p>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-12">
+                    <a href="#" class="inline-flex items-center text-blue-700 hover:text-blue-900 font-semibold text-lg">
+                        Voir toutes les actualités
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section CTA Final -->
+        <section id="final-cta" class="py-16 md:py-24 px-4 bg-gradient-to-r from-blue-800 to-blue-600 section-hidden">
+            <div class="max-w-4xl mx-auto text-center text-white">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                    Prêt à transformer votre avenir professionnel ?
+                </h2>
+                <p class="text-xl mb-10 max-w-2xl mx-auto text-blue-100">
+                    Rejoignez notre communauté d'apprenants et bénéficiez d'un accompagnement personnalisé tout au long de votre parcours.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button class="bg-white hover:bg-gray-100 text-blue-800 font-bold py-4 px-10 rounded-lg text-lg transition duration-300 transform hover:scale-105">
+                        <i class="fas fa-calendar-check mr-2"></i> Demander un rendez-vous
+                    </button>
+                    <button class="bg-transparent border-2 border-white hover:bg-blue-700 text-white font-bold py-4 px-10 rounded-lg text-lg transition duration-300 transform hover:scale-105">
+                        <i class="fas fa-phone-alt mr-2"></i> Nous contacter
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-12 pb-8">
+            <div class="container mx-auto px-4">
+                <div class="grid md:grid-cols-4 gap-8 mb-8">
+                    <!-- Logo et description -->
+                    <div class="md:col-span-2">
+                        <div class="flex items-center mb-6">
+                          <div class="mr-3">
+        <img src="ifptlogo-removebg-preview.png" alt="Logo IFEPT HAITI" class="h-12 w-auto object-contain">
+    </div>
+                            <div>
+                                <h2 class="text-2xl font-bold">IFEPT HAITI</h2>
+                                <p class="text-sm text-gray-300">Plateforme d'enseignement en ligne</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 mb-6">École de référence en matière de formation à l'échelle nationale et internationale</p>
                         <div class="flex space-x-4">
-                            <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">
+                            <a href="https://www.facebook.com/share/1BnXZxoXJr/" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-blue-600 transition">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
-                            <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-400 transition-colors">
+                            <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-blue-400 transition">
                                 <i class="fab fa-twitter"></i>
                             </a>
-                            <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-pink-600 transition-colors">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                            <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
+                            <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-red-500 transition">
                                 <i class="fab fa-youtube"></i>
                             </a>
+                            <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-blue-700 transition">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
                         </div>
                     </div>
-                </div>
-                
-                <div>
-                    <h3 class="font-bold text-xl mb-6">Envoyez-nous un message</h3>
                     
-                    <form class="space-y-4">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label for="name" class="block text-blue-100 mb-1">Nom complet</label>
-                                <input type="text" id="name" class="w-full px-4 py-3 bg-gray-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            </div>
-                            <div>
-                                <label for="email" class="block text-blue-100 mb-1">Email</label>
-                                <input type="email" id="email" class="w-full px-4 py-3 bg-gray-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <label for="subject" class="block text-blue-100 mb-1">Sujet</label>
-                            <input type="text" id="subject" class="w-full px-4 py-3 bg-gray-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        </div>
-                        
-                        <div>
-                            <label for="message" class="block text-blue-100 mb-1">Message</label>
-                            <textarea id="message" rows="4" class="w-full px-4 py-3 bg-gray-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                        </div>
-                        
-                        <button type="submit" class="gradient-primary text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all w-full">
-                            <i class="fas fa-paper-plane mr-2"></i>
-                            Envoyer le message
-                        </button>
-                    </form>
+                    <!-- Liens rapides -->
+                    <div>
+                        <h3 class="text-lg font-bold mb-6">Liens rapides</h3>
+                        <ul class="space-y-3">
+                            <li><a href="index.html" class="text-gray-400 hover:text-white transition">Accueil</a></li>
+                            <li><a href="formation.html" class="text-gray-400 hover:text-white transition">Formations</a></li>
+                            <li><a href="apropos.html" class="text-gray-400 hover:text-white transition">À propos</a></li>
+                            <li><a href="https://form.jotform.com/isd_haiti/formulaire-dinscription-des-tudiant" class="text-gray-400 hover:text-white transition">Admission</a></li>
+                            <li><a href="contct.html" class="text-gray-400 hover:text-white transition">Contact</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Contact footer -->
+                    <div>
+                        <h3 class="text-lg font-bold mb-6">Contact</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-map-marker-alt text-blue-400 mt-1 mr-3"></i>
+                                <span class="text-gray-400">24, Puits Blain prolongée, Delmas 75</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-phone-alt text-blue-400 mt-1 mr-3"></i>
+                                <span class="text-gray-400">50934459737</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-envelope text-blue-400 mt-1 mr-3"></i>
+                                <span class="text-gray-400">ifep.educ@gmail.com</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Copyright -->
+                <div class="pt-8 border-t border-gray-800 text-center text-gray-500 text-sm">
+                    <p>&copy; 2026 Institut Professionnel des Jeunes de Delmas. Tous droits réservés.</p>
+                    <p class="mt-2">Site conçu avec <i class="fas fa-heart text-red-500"></i> pour la jeunesse de Delmas</p>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-black text-white py-12">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
-                <div>
-                    <div class="flex items-center space-x-3 mb-6">
-                        <div class="w-10 h-10 gradient-primary rounded-lg flex items-center justify-center">
-                                                 <img src="logo_cicle-removebg-preview.png" alt="">
-
-                        </div>
-                        <span class="font-display font-bold text-xl">CICLE</span>
-                    </div>
-                    <p class="text-gray-400 text-sm mb-6">
-                        Centre des Investisseurs Chrétiens pour la Liberté Économique - Former, Investir, Transformer.
-                    </p>
-                    <p class="text-gray-400 text-sm">
-                        © 2025 CICLE. Tous droits réservés.
-                    </p>
-                </div>
-                
-                <div>
-                    <h4 class="font-bold text-lg mb-6">Liens rapides</h4>
-                    <div class="space-y-3">
-                        <a href="#mission" class="block text-gray-400 hover:text-white transition-colors">Mission</a>
-                        <a href="#vision" class="block text-gray-400 hover:text-white transition-colors">Vision</a>
-                        <a href="#valeurs" class="block text-gray-400 hover:text-white transition-colors">Valeurs</a>
-                        <a href="#programmes" class="block text-gray-400 hover:text-white transition-colors">Programmes</a>
-                        <a href="#equipe" class="block text-gray-400 hover:text-white transition-colors">Équipe</a>
-                    </div>
-                </div>
-                
-                <div>
-                    <h4 class="font-bold text-lg mb-6">Programmes</h4>
-                    <div class="space-y-3">
-                        <a href="#" class="block text-gray-400 hover:text-white transition-colors">Formations</a>
-                        <a href="#" class="block text-gray-400 hover:text-white transition-colors">Accompagnement</a>
-                        <a href="#" class="block text-gray-400 hover:text-white transition-colors">Réseautage</a>
-                        <a href="#" class="block text-gray-400 hover:text-white transition-colors">Plaidoyer</a>
-                        <a href="#" class="block text-gray-400 hover:text-white transition-colors">Projets à Impact</a>
-                    </div>
-                </div>
-                
-                <div>
-                    <h4 class="font-bold text-lg mb-6">Newsletter</h4>
-                    <p class="text-gray-400 text-sm mb-4">
-                        Abonnez-vous pour recevoir nos dernières actualités et événements.
-                    </p>
-                    <div class="flex">
-                        <input type="email" placeholder="Votre email" class="flex-grow px-4 py-3 bg-gray-800 rounded-l-lg text-white focus:outline-none">
-                        <button class="gradient-primary text-white px-4 rounded-r-lg">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-
+        </footer>
+    <!-- JavaScript -->
     <script>
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.createElement('div');
-        mobileMenu.className = 'fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center hidden';
-        mobileMenu.innerHTML = `
-            <div class="text-center relative">
-                <button id="close-menu-btn" class="absolute top-4 right-4 text-white text-2xl">
-                    <i class="fas fa-times"></i>
-                </button>
-               <div class="space-y-6">
-    <a href="#mission" class="block text-white text-xl font-medium hover:text-blue-300 transition-colors">Mission</a>
-    <a href="#vision" class="block text-white text-xl font-medium hover:text-blue-300 transition-colors">Vision</a>
-    <a href="#valeurs" class="block text-white text-xl font-medium hover:text-blue-300 transition-colors">Valeurs</a>
-    <a href="celi.html" class="block text-white text-xl font-medium hover:text-blue-300 transition-colors">CELI</a>
-    <a href="invest.html" class="block text-white text-xl font-medium hover:text-blue-300 transition-colors">CELI CEC</a>
-    <a href="elan-vs.html" class="block text-white text-xl font-medium hover:text-blue-300 transition-colors">ELAN VS</a>
-    <a href="#contact" class="block text-white text-xl font-medium hover:text-blue-300 transition-colors">Contact</a>
+        // ============================================
+        // CONFIGURATION FIREBASE
+        // ============================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyBZEl66YW2x4csBHfU3BlSDBYxigVQ1U8U",
+            authDomain: "izipret-c669d.firebaseapp.com",
+            projectId: "izipret-c669d",
+            storageBucket: "izipret-c669d.firebasestorage.app",
+            messagingSenderId: "483506445126",
+            appId: "1:483506445126:web:5dcc2efef0fabb8f0b2347",
+            measurementId: "G-0SKSRSFHZ4"
+        };
 
-    <button class="gradient-primary text-white px-8 py-3 rounded-lg font-semibold text-lg hover:shadow-xl transition-all mt-6">
-        Devenir Membre
-    </button>
-</div>
-
-            </div>
-        `;
-        document.body.appendChild(mobileMenu);
+        // Initialiser Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        // IMPORTANT : Initialiser Firebase Authentication
+        const auth = firebase.auth();
         
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.remove('hidden');
-        });
+        // ============================================
+        // GESTION DE L'AUTHENTIFICATION
+        // ============================================
         
-        document.getElementById('close-menu-btn').addEventListener('click', () => {
-            mobileMenu.classList.add('hidden');
-        });
-        
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                    mobileMenu.classList.add('hidden');
-                }
+        // Écouter les changements d'état d'authentification
+        function setupAuthStateListener() {
+            auth.onAuthStateChanged((user) => {
+                console.log("État d'authentification changé:", user ? "Connecté" : "Non connecté");
+                updateHeaderForAuthState(user);
             });
-        });
+        }
         
-        // Scroll reveal animation
-        const revealSections = () => {
-            const sections = document.querySelectorAll('.section-reveal');
+        // Mettre à jour le header en fonction de l'état d'authentification
+        function updateHeaderForAuthState(user) {
+            const authButtonsDesktop = document.getElementById('auth-buttons-desktop');
+            const authButtonsMobile = document.getElementById('auth-buttons-mobile');
+            const userMenuDesktop = document.getElementById('user-menu-desktop');
+            const userMenuMobile = document.getElementById('user-menu-mobile');
             
-            sections.forEach(section => {
-                const sectionTop = section.getBoundingClientRect().top;
-                const windowHeight = window.innerHeight;
+            if (user) {
+                // Utilisateur connecté
+                console.log("Utilisateur connecté:", user.email);
                 
-                if (sectionTop < windowHeight - 100) {
-                    section.classList.add('section-visible');
+                // Masquer les boutons de connexion/inscription
+                if (authButtonsDesktop) authButtonsDesktop.classList.add('auth-buttons-hidden');
+                if (authButtonsMobile) authButtonsMobile.classList.add('auth-buttons-hidden');
+                
+                // Afficher le menu utilisateur
+                if (userMenuDesktop) userMenuDesktop.classList.remove('user-menu-hidden');
+                if (userMenuMobile) userMenuMobile.classList.remove('user-menu-hidden');
+                
+            } else {
+                // Utilisateur non connecté
+                console.log("Utilisateur non connecté");
+                
+                // Afficher les boutons de connexion/inscription
+                if (authButtonsDesktop) authButtonsDesktop.classList.remove('auth-buttons-hidden');
+                if (authButtonsMobile) authButtonsMobile.classList.remove('auth-buttons-hidden');
+                
+                // Masquer le menu utilisateur
+                if (userMenuDesktop) userMenuDesktop.classList.add('user-menu-hidden');
+                if (userMenuMobile) userMenuMobile.classList.add('user-menu-hidden');
+            }
+        }
+        
+        // Fonction de déconnexion
+        function logoutUser() {
+            auth.signOut().then(() => {
+                console.log("Déconnexion réussie");
+                // Rediriger vers la page d'accueil après déconnexion
+                window.location.href = "index.html";
+            }).catch((error) => {
+                console.error("Erreur lors de la déconnexion:", error);
+            });
+        }
+        
+        // ============================================
+        // GESTION DU HEADER (MENUS, DROPDOWNS)
+        // ============================================
+        
+        function setupHeaderEventListeners() {
+            // Menu mobile
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+            
+            // Dropdown menu utilisateur (desktop)
+            const userMenuButton = document.getElementById('user-menu-button');
+            const userDropdown = document.getElementById('user-dropdown');
+            
+            if (userMenuButton && userDropdown) {
+                userMenuButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    userDropdown.classList.toggle('hidden');
+                });
+                
+                // Fermer le dropdown en cliquant ailleurs
+                document.addEventListener('click', () => {
+                    userDropdown.classList.add('hidden');
+                });
+                
+                // Empêcher la fermeture quand on clique dans le dropdown
+                userDropdown.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+            }
+            
+            // Boutons de déconnexion
+            const logoutButton = document.getElementById('logout-button');
+            const logoutButtonMobile = document.getElementById('logout-button-mobile');
+            
+            if (logoutButton) {
+                logoutButton.addEventListener('click', logoutUser);
+            }
+            
+            if (logoutButtonMobile) {
+                logoutButtonMobile.addEventListener('click', logoutUser);
+            }
+            
+            // Navigation fluide pour les liens internes
+            document.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A' && e.target.getAttribute('href') && e.target.getAttribute('href').startsWith('#')) {
+                    e.preventDefault();
+                    const targetId = e.target.getAttribute('href');
+                    if (targetId !== '#') {
+                        const targetElement = document.querySelector(targetId);
+                        if (targetElement) {
+                            // Fermer le menu mobile si ouvert
+                            if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                                mobileMenu.classList.add('hidden');
+                            }
+                            
+                            window.scrollTo({
+                                top: targetElement.offsetTop - 80,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
                 }
             });
+        }
+        
+        // ============================================
+        // DONNÉES ET ANIMATIONS (existant)
+        // ============================================
+        
+        const defaultData = {
+            hero: {
+                title: "Institut de Formation et d'Éducation Professionnelle et Technologique",
+                subtitle: "Former les talents de demain avec des programmes innovants et adaptés au marché",
+                backgroundImage: "galerie4.jpeg"
+            },
+            presentation: {
+                text: "L'IFEPT s'engage à offrir une éducation professionnelle et technologique de qualité, en phase avec les besoins du marché du travail. Notre mission est de former des professionnels compétents, innovants et prêts à relever les défis de l'économie moderne."
+            }
         };
         
-        window.addEventListener('scroll', revealSections);
-        window.addEventListener('load', revealSections);
-        
-        // Header shadow on scroll
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('header');
-            if (window.scrollY > 50) {
-                header.classList.add('shadow-lg');
-            } else {
-                header.classList.remove('shadow-lg');
+        async function loadHomepageContent() {
+            try {
+                console.log("Chargement du contenu depuis Firebase...");
+                
+                const homepageDoc = await db.collection('homepage').doc('content').get();
+                let homepageData = defaultData;
+                
+                if (homepageDoc.exists) {
+                    console.log("Document homepage trouvé dans Firebase");
+                    homepageData = homepageDoc.data();
+                } else {
+                    console.log("Aucun document homepage trouvé, utilisation des données par défaut");
+                }
+                
+                const programsSnapshot = await db.collection('programs').orderBy('order', 'asc').get();
+                const programs = [];
+                programsSnapshot.forEach(doc => {
+                    programs.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+                
+                const featuresSnapshot = await db.collection('features').orderBy('order', 'asc').get();
+                const features = [];
+                featuresSnapshot.forEach(doc => {
+                    features.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+                
+                const newsSnapshot = await db.collection('news').orderBy('date', 'desc').limit(3).get();
+                const news = [];
+                newsSnapshot.forEach(doc => {
+                    news.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+                
+                updateUIWithData(homepageData, programs, features, news);
+                
+            } catch (error) {
+                console.error("Erreur lors du chargement depuis Firebase:", error);
+                console.log("Utilisation des données par défaut");
+                updateUIWithData(defaultData, [], [], []);
             }
+        }
+        
+        function updateUIWithData(homepageData, programs, features, news) {
+            if (homepageData && homepageData.hero) {
+                document.getElementById('hero-title').textContent = homepageData.hero.title || defaultData.hero.title;
+                document.getElementById('hero-subtitle').textContent = homepageData.hero.subtitle || defaultData.hero.subtitle;
+                
+                if (homepageData.hero.backgroundImage) {
+                    const bgDiv = document.getElementById('hero-background');
+                    bgDiv.style.backgroundImage = `url(${homepageData.hero.backgroundImage})`;
+                    bgDiv.style.backgroundSize = 'cover';
+                    bgDiv.style.backgroundPosition = 'center';
+                    console.log("Image de fond chargée:", homepageData.hero.backgroundImage);
+                }
+            }
+            
+            if (homepageData && homepageData.presentation && homepageData.presentation.text) {
+                document.getElementById('presentation-text').textContent = homepageData.presentation.text;
+            }
+            
+            const programsContainer = document.getElementById('programs-container');
+            if (programs && programs.length > 0) {
+                programsContainer.innerHTML = '';
+                const visiblePrograms = programs.filter(program => program.visible !== false);
+                
+                visiblePrograms.forEach(program => {
+                    const programElement = document.createElement('div');
+                    programElement.className = 'bg-white rounded-xl shadow-md overflow-hidden card-hover section-hidden';
+                    
+                    const colorClass = `color-badge-${program.color || 'blue'}`;
+                    const colorText = program.color ? program.color.charAt(0).toUpperCase() + program.color.slice(1) : 'Blue';
+                    
+                    let programHTML = `
+                        <div class="program-image-container">
+                    `;
+                    
+                    if (program.image) {
+                        programHTML += `
+                            <img src="${program.image}" alt="${program.title}" class="program-image" onerror="this.src='https://via.placeholder.com/400x200?text=Image+non+disponible'">
+                        `;
+                    } else {
+                        programHTML += `
+                            <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                <i class="fas fa-graduation-cap text-gray-400 text-4xl"></i>
+                            </div>
+                        `;
+                    }
+                    
+                    programHTML += `
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="text-xl font-bold text-gray-800">${program.title}</h3>
+                                <span class="${colorClass} text-xs font-medium px-2 py-1 rounded">
+                                    ${colorText}
+                                </span>
+                            </div>
+                            <p class="text-gray-600 mb-4">${program.description}</p>
+                    `;
+                    
+                    if (program.link) {
+                        programHTML += `
+                            <div class="mt-6">
+                                <a href="${program.link}" class="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center">
+                                    En savoir plus <i class="fas fa-arrow-right ml-1"></i>
+                                </a>
+                            </div>
+                        `;
+                    }
+                    
+                    programHTML += `</div>`;
+                    programElement.innerHTML = programHTML;
+                    programsContainer.appendChild(programElement);
+                });
+            } else {
+                programsContainer.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-book-open text-gray-400 text-2xl"></i>
+                        </div>
+                        <p class="text-gray-600">Aucun programme disponible pour le moment</p>
+                        <p class="text-gray-500 text-sm mt-2">Les programmes seront bientôt ajoutés</p>
+                    </div>
+                `;
+            }
+            
+            const featuresContainer = document.getElementById('features-container');
+            if (features && features.length > 0) {
+                featuresContainer.innerHTML = '';
+                const sortedFeatures = [...features].sort((a, b) => (a.order || 0) - (b.order || 0));
+                
+                sortedFeatures.forEach(feature => {
+                    const featureElement = document.createElement('div');
+                    featureElement.className = 'bg-white rounded-xl shadow-md p-6 card-hover section-hidden';
+                    featureElement.innerHTML = `
+                        <div class="flex flex-col items-center text-center">
+                            <div class="flex items-center justify-center w-16 h-16 bg-blue-100 text-blue-600 rounded-full mb-4">
+                                <i class="fas fa-${feature.icon || 'star'} text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">${feature.title}</h3>
+                            <p class="text-gray-600">${feature.description}</p>
+                        </div>
+                    `;
+                    featuresContainer.appendChild(featureElement);
+                });
+            } else {
+                featuresContainer.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-star text-gray-400 text-2xl"></i>
+                        </div>
+                        <p class="text-gray-600">Les avantages seront bientôt ajoutés</p>
+                    </div>
+                `;
+            }
+            
+            const newsContainer = document.getElementById('news-container');
+            if (news && news.length > 0) {
+                newsContainer.innerHTML = '';
+                const publishedNews = news.filter(item => item.published !== false);
+                
+                publishedNews.forEach(newsItem => {
+                    const newsElement = document.createElement('div');
+                    newsElement.className = 'bg-white rounded-xl shadow-md overflow-hidden card-hover section-hidden';
+                    
+                    let dateDisplay = 'Date non définie';
+                    if (newsItem.date) {
+                        const date = new Date(newsItem.date);
+                        if (!isNaN(date.getTime())) {
+                            dateDisplay = date.toLocaleDateString('fr-FR', {
+                                day: 'numeric',
+                                month: 'long',
+                                year: 'numeric'
+                            });
+                        }
+                    }
+                    
+                    let newsHTML = `<div class="p-6">`;
+                    
+                    if (newsItem.image) {
+                        newsHTML += `
+                            <div class="mb-4">
+                                <img src="${newsItem.image}" alt="${newsItem.title}" class="w-full h-48 object-cover rounded-lg" onerror="this.src='https://via.placeholder.com/400x200?text=Image+non+disponible'">
+                            </div>
+                        `;
+                    }
+                    
+                    newsHTML += `
+                        <div class="text-blue-600 font-medium mb-2">
+                            <i class="far fa-calendar-alt mr-2"></i> ${dateDisplay}
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">${newsItem.title}</h3>
+                        <p class="text-gray-600 mb-4">${newsItem.description}</p>
+                        <a href="#" class="text-blue-600 hover:text-blue-800 font-medium">
+                            Lire l'article <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>`;
+                    
+                    newsElement.innerHTML = newsHTML;
+                    newsContainer.appendChild(newsElement);
+                });
+            } else {
+                newsContainer.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-newspaper text-gray-400 text-2xl"></i>
+                        </div>
+                        <p class="text-gray-600">Aucune actualité disponible pour le moment</p>
+                        <p class="text-gray-500 text-sm mt-2">Les actualités seront bientôt ajoutées</p>
+                    </div>
+                `;
+            }
+            
+            initAnimations();
+        }
+        
+        function initAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if (entry.target.id === 'hero-content') {
+                            anime({
+                                targets: '#hero-content',
+                                opacity: [0, 1],
+                                translateY: [30, 0],
+                                duration: 1000,
+                                easing: 'easeOutCubic'
+                            });
+                        } else if (entry.target.classList.contains('section-hidden')) {
+                            entry.target.classList.remove('section-hidden');
+                            entry.target.classList.add('animate-fade-in');
+                            
+                            const cards = entry.target.querySelectorAll('.card-hover');
+                            if (cards.length > 0) {
+                                anime({
+                                    targets: cards,
+                                    opacity: [0, 1],
+                                    translateY: [30, 0],
+                                    delay: anime.stagger(100),
+                                    duration: 800,
+                                    easing: 'easeOutCubic'
+                                });
+                            }
+                        }
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.section-hidden').forEach(section => {
+                observer.observe(section);
+            });
+            
+            const heroContent = document.getElementById('hero-content');
+            if (heroContent) {
+                observer.observe(heroContent);
+            }
+        }
+        
+        function setupEventListeners() {
+            document.addEventListener('click', function(e) {
+                if (e.target.id === 'cta-courses' || e.target.closest('#cta-courses')) {
+                    e.preventDefault();
+                    const programsSection = document.getElementById('programs');
+                    if (programsSection) {
+                        window.scrollTo({
+                            top: programsSection.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+                
+                if (e.target.id === 'cta-register' || e.target.closest('#cta-register')) {
+                    e.preventDefault();
+                    const contactSection = document.getElementById('contact');
+                    if (contactSection) {
+                        window.scrollTo({
+                            top: contactSection.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    } else {
+                        alert('Fonctionnalité d\'inscription - À implémenter');
+                    }
+                }
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A' && e.target.getAttribute('href') && e.target.getAttribute('href').startsWith('#')) {
+                    e.preventDefault();
+                    const targetId = e.target.getAttribute('href');
+                    if (targetId !== '#') {
+                        const targetElement = document.querySelector(targetId);
+                        if (targetElement) {
+                            window.scrollTo({
+                                top: targetElement.offsetTop - 80,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                }
+            });
+        }
+        
+        // ============================================
+        // INITIALISATION DE LA PAGE
+        // ============================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("Initialisation de la page...");
+            
+            // 1. Configurer l'authentification Firebase
+            setupAuthStateListener();
+            
+            // 2. Configurer les événements du header
+            setupHeaderEventListeners();
+            
+            // 3. Charger le contenu depuis Firebase
+            loadHomepageContent();
+            
+            // 4. Configurer les autres événements
+            setupEventListeners();
+            
+            console.log("Page initialisée avec succès");
         });
     </script>
 </body>

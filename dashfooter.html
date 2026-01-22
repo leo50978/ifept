@@ -1,0 +1,458 @@
+<!-- dashboardfooter.html - Dashboard d'administration du Footer -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration du Footer</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- En-tête -->
+        <header class="mb-10">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">
+                <i class="fas fa-sliders-h mr-3 text-blue-600"></i>Administration du Footer
+            </h1>
+            <p class="text-gray-600">Modifiez le contenu du footer de votre site web</p>
+        </header>
+
+        <!-- Messages d'alerte -->
+        <div id="alert-message" class="hidden fixed top-4 right-4 z-50 max-w-md"></div>
+
+        <!-- Contenu principal -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Formulaire d'édition -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6 pb-4 border-b">
+                        <i class="fas fa-edit mr-2 text-blue-500"></i>Éditer le contenu
+                    </h2>
+                    
+                    <form id="footer-form" class="space-y-6">
+                        <!-- Informations de base -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="institutionName" class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="fas fa-building mr-1"></i>Nom de l'institution
+                                </label>
+                                <input type="text" id="institutionName" name="institutionName" 
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                                       placeholder="Nom de votre institution">
+                            </div>
+                            
+                            <div>
+                                <label for="copyright" class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="fas fa-copyright mr-1"></i>Texte de copyright
+                                </label>
+                                <input type="text" id="copyright" name="copyright" 
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                                       placeholder="© 2024 Tous droits réservés">
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div>
+                            <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-align-left mr-1"></i>Description
+                            </label>
+                            <textarea id="description" name="description" rows="3"
+                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                                      placeholder="Brève description de votre institution"></textarea>
+                        </div>
+
+                        <!-- Informations de contact -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="fas fa-envelope mr-1"></i>Email
+                                </label>
+                                <input type="email" id="email" name="email" 
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                                       placeholder="contact@institution.com">
+                            </div>
+                            
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="fas fa-phone mr-1"></i>Téléphone
+                                </label>
+                                <input type="text" id="phone" name="phone" 
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                                       placeholder="+33 1 23 45 67 89">
+                            </div>
+                            
+                            <div>
+                                <label for="address" class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="fas fa-map-marker-alt mr-1"></i>Adresse
+                                </label>
+                                <input type="text" id="address" name="address" 
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                                       placeholder="123 Rue Example, Ville">
+                            </div>
+                        </div>
+
+                        <!-- Réseaux sociaux -->
+                        <div class="border-t pt-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                                <i class="fas fa-share-alt mr-2"></i>Réseaux sociaux
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="facebook" class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class="fab fa-facebook mr-2 text-blue-600"></i>Facebook
+                                    </label>
+                                    <input type="url" id="facebook" name="facebook" 
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                                           placeholder="https://facebook.com/votrepage">
+                                </div>
+                                
+                                <div>
+                                    <label for="instagram" class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class="fab fa-instagram mr-2 text-pink-600"></i>Instagram
+                                    </label>
+                                    <input type="url" id="instagram" name="instagram" 
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                                           placeholder="https://instagram.com/votrecompte">
+                                </div>
+                                
+                                <div>
+                                    <label for="twitter" class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class="fab fa-twitter mr-2 text-blue-400"></i>Twitter
+                                    </label>
+                                    <input type="url" id="twitter" name="twitter" 
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                                           placeholder="https://twitter.com/votrecompte">
+                                </div>
+                                
+                                <div>
+                                    <label for="linkedin" class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class="fab fa-linkedin mr-2 text-blue-700"></i>LinkedIn
+                                    </label>
+                                    <input type="url" id="linkedin" name="linkedin" 
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                                           placeholder="https://linkedin.com/company/votresociete">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Boutons d'action -->
+                        <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t">
+                            <button type="submit" 
+                                    class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition duration-300 flex items-center justify-center">
+                                <i class="fas fa-save mr-2"></i>Enregistrer les modifications
+                            </button>
+                            
+                            <button type="button" id="reset-btn"
+                                    class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 px-6 rounded-lg transition duration-300 flex items-center justify-center">
+                                <i class="fas fa-undo mr-2"></i>Réinitialiser
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Aperçu et informations -->
+            <div class="space-y-8">
+                <!-- Aperçu -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">
+                        <i class="fas fa-eye mr-2 text-green-500"></i>Aperçu
+                    </h2>
+                    <div class="border rounded-lg p-4 bg-gray-50">
+                        <div id="preview-content" class="text-sm space-y-3">
+                            <p class="text-gray-500">L'aperçu se mettra à jour automatiquement...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instructions -->
+                <div class="bg-blue-50 border border-blue-200 rounded-xl p-6">
+                    <h3 class="text-lg font-semibold text-blue-800 mb-3">
+                        <i class="fas fa-info-circle mr-2"></i>Instructions
+                    </h3>
+                    <ul class="space-y-2 text-blue-700 text-sm">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-2 text-green-500"></i>
+                            <span>Tous les champs sont optionnels</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-link mt-1 mr-2 text-purple-500"></i>
+                            <span>Les liens sociaux s'affichent uniquement s'ils sont renseignés</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-sync-alt mt-1 mr-2 text-yellow-500"></i>
+                            <span>Les modifications sont immédiatement visibles sur le site</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle mt-1 mr-2 text-red-500"></i>
+                            <span>Ne quittez pas la page avant la confirmation d'enregistrement</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Statut de chargement -->
+                <div id="loading-indicator" class="hidden">
+                    <div class="flex items-center justify-center p-4">
+                        <div class="loading-spinner mr-3"></div>
+                        <span class="text-gray-600">Chargement...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts Firebase -->
+    <script type="module">
+        // Import des fonctions Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+        // Configuration Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBZEl66YW2x4csBHfU3BlSDBYxigVQ1U8U",
+            authDomain: "izipret-c669d.firebaseapp.com",
+            projectId: "izipret-c669d",
+            storageBucket: "izipret-c669d.firebasestorage.app",
+            messagingSenderId: "483506445126",
+            appId: "1:483506445126:web:5dcc2efef0fabb8f0b2347",
+            measurementId: "G-0SKSRSFHZ4"
+        };
+
+        // Initialisation Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Références aux éléments DOM
+        const footerForm = document.getElementById('footer-form');
+        const resetBtn = document.getElementById('reset-btn');
+        const alertMessage = document.getElementById('alert-message');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const previewContent = document.getElementById('preview-content');
+
+        /**
+         * Affiche un message d'alerte
+         * @param {string} message - Le message à afficher
+         * @param {string} type - Type d'alerte (success, error, warning)
+         */
+        function showAlert(message, type = 'success') {
+            const colors = {
+                success: 'bg-green-100 border-green-400 text-green-700',
+                error: 'bg-red-100 border-red-400 text-red-700',
+                warning: 'bg-yellow-100 border-yellow-400 text-yellow-700'
+            };
+
+            alertMessage.className = `${colors[type]} border px-6 py-4 rounded-lg shadow-lg`;
+            alertMessage.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} mr-3"></i>
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.parentElement.classList.add('hidden')" 
+                            class="ml-auto text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            alertMessage.classList.remove('hidden');
+
+            // Masquer automatiquement après 5 secondes
+            setTimeout(() => {
+                alertMessage.classList.add('hidden');
+            }, 5000);
+        }
+
+        /**
+         * Charge les données du footer depuis Firestore
+         */
+        async function loadFooterData() {
+            try {
+                loadingIndicator.classList.remove('hidden');
+                
+                const footerRef = doc(db, "footer", "content");
+                const footerSnap = await getDoc(footerRef);
+
+                if (footerSnap.exists()) {
+                    const data = footerSnap.data();
+                    
+                    // Remplir le formulaire
+                    document.getElementById('institutionName').value = data.institutionName || '';
+                    document.getElementById('description').value = data.description || '';
+                    document.getElementById('email').value = data.email || '';
+                    document.getElementById('phone').value = data.phone || '';
+                    document.getElementById('address').value = data.address || '';
+                    document.getElementById('copyright').value = data.copyright || '';
+                    
+                    // Remplir les liens sociaux
+                    document.getElementById('facebook').value = data.socialLinks?.facebook || '';
+                    document.getElementById('instagram').value = data.socialLinks?.instagram || '';
+                    document.getElementById('twitter').value = data.socialLinks?.twitter || '';
+                    document.getElementById('linkedin').value = data.socialLinks?.linkedin || '';
+
+                    // Mettre à jour l'aperçu
+                    updatePreview(data);
+                    
+                    showAlert('Données chargées avec succès', 'success');
+                } else {
+                    showAlert('Aucune configuration trouvée. Utilisez les valeurs par défaut.', 'warning');
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement:', error);
+                showAlert('Erreur lors du chargement des données', 'error');
+            } finally {
+                loadingIndicator.classList.add('hidden');
+            }
+        }
+
+        /**
+         * Met à jour l'aperçu avec les données actuelles
+         */
+        function updatePreview(data) {
+            const socialLinks = data.socialLinks || {};
+            const hasSocialLinks = Object.values(socialLinks).some(link => link && link.trim() !== '');
+            
+            previewContent.innerHTML = `
+                <div class="space-y-2">
+                    <p class="font-semibold text-gray-800">${data.institutionName || 'Nom de l\'institution'}</p>
+                    <p class="text-gray-600">${data.description || 'Description non définie'}</p>
+                </div>
+                <div class="space-y-1 text-gray-500">
+                    ${data.email ? `<p><i class="fas fa-envelope mr-2"></i>${data.email}</p>` : ''}
+                    ${data.phone ? `<p><i class="fas fa-phone mr-2"></i>${data.phone}</p>` : ''}
+                    ${data.address ? `<p><i class="fas fa-map-marker-alt mr-2"></i>${data.address}</p>` : ''}
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400">${data.copyright || 'Copyright non défini'}</p>
+                </div>
+                ${hasSocialLinks ? 
+                    `<div class="flex space-x-2 mt-3">
+                        ${socialLinks.facebook ? '<i class="fab fa-facebook text-blue-600"></i>' : ''}
+                        ${socialLinks.instagram ? '<i class="fab fa-instagram text-pink-600"></i>' : ''}
+                        ${socialLinks.twitter ? '<i class="fab fa-twitter text-blue-400"></i>' : ''}
+                        ${socialLinks.linkedin ? '<i class="fab fa-linkedin text-blue-700"></i>' : ''}
+                    </div>` 
+                    : '<p class="text-xs text-gray-400 mt-3">Aucun réseau social configuré</p>'
+                }
+            `;
+        }
+
+        /**
+         * Sauvegarde les données du footer dans Firestore
+         */
+        async function saveFooterData(formData) {
+            try {
+                loadingIndicator.classList.remove('hidden');
+                
+                const footerData = {
+                    institutionName: formData.institutionName,
+                    description: formData.description,
+                    email: formData.email,
+                    phone: formData.phone,
+                    address: formData.address,
+                    copyright: formData.copyright,
+                    socialLinks: {
+                        facebook: formData.facebook,
+                        instagram: formData.instagram,
+                        twitter: formData.twitter,
+                        linkedin: formData.linkedin
+                    }
+                };
+
+                // Nettoyer les données (supprimer les valeurs vides des liens sociaux)
+                Object.keys(footerData.socialLinks).forEach(key => {
+                    if (!footerData.socialLinks[key] || footerData.socialLinks[key].trim() === '') {
+                        delete footerData.socialLinks[key];
+                    }
+                });
+
+                const footerRef = doc(db, "footer", "content");
+                await setDoc(footerRef, footerData, { merge: true });
+
+                showAlert('Footer mis à jour avec succès !', 'success');
+                updatePreview(footerData);
+                
+            } catch (error) {
+                console.error('Erreur lors de la sauvegarde:', error);
+                showAlert('Erreur lors de la sauvegarde des données', 'error');
+            } finally {
+                loadingIndicator.classList.add('hidden');
+            }
+        }
+
+        /**
+         * Gère la soumission du formulaire
+         */
+        footerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Récupérer les données du formulaire
+            const formData = {
+                institutionName: document.getElementById('institutionName').value,
+                description: document.getElementById('description').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                copyright: document.getElementById('copyright').value,
+                facebook: document.getElementById('facebook').value,
+                instagram: document.getElementById('instagram').value,
+                twitter: document.getElementById('twitter').value,
+                linkedin: document.getElementById('linkedin').value
+            };
+
+            await saveFooterData(formData);
+        });
+
+        /**
+         * Réinitialise le formulaire
+         */
+        resetBtn.addEventListener('click', () => {
+            if (confirm('Voulez-vous vraiment réinitialiser le formulaire ? Les modifications non enregistrées seront perdues.')) {
+                footerForm.reset();
+                showAlert('Formulaire réinitialisé', 'warning');
+            }
+        });
+
+        /**
+         * Met à jour l'aperçu en temps réel
+         */
+        footerForm.addEventListener('input', () => {
+            const formData = {
+                institutionName: document.getElementById('institutionName').value,
+                description: document.getElementById('description').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                copyright: document.getElementById('copyright').value,
+                socialLinks: {
+                    facebook: document.getElementById('facebook').value,
+                    instagram: document.getElementById('instagram').value,
+                    twitter: document.getElementById('twitter').value,
+                    linkedin: document.getElementById('linkedin').value
+                }
+            };
+            updatePreview(formData);
+        });
+
+        // Charger les données au démarrage
+        document.addEventListener('DOMContentLoaded', loadFooterData);
+    </script>
+</body>
+</html>
